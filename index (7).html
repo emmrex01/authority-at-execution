@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Zyzyx Authority System — Operational governance, authority validation, and execution-time accountability frameworks for AI, robotics, and autonomous systems." />
+  <meta name="keywords" content="autonomous vehicles, robotaxis, robotics, AI governance, autonomous systems, AI safety, authority validation, execution-layer governance, human authority, operational accountability" />
+  <title>Zyzyx Authority System™ — Governance &amp; Authority at Execution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #06080d;
+      --bg2:       #090c14;
+      --bg3:       #070a11;
+      --border:    rgba(255,255,255,0.055);
+      --border2:   rgba(255,255,255,0.09);
+      --steel:     #3d5a80;
+      --steel-lo:  #2a3f5f;
+      --steel-hi:  #4e6f9a;
+      --steel-dim: #2e4560;
+      --text:      #c8cdd8;
+      --text-dim:  #7a8599;
+      --text-lo:   #4a5268;
+      --muted:     #3a4255;
+      --white:     #dde2ec;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grid — very subtle, structural not decorative */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(61,90,128,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,90,128,0.035) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+      height: 52px;
+      background: rgba(6,8,13,0.97);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-wordmark {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 400;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      color: var(--steel-hi);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: var(--text-lo);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-dim); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 110px 52px 80px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards 0.1s;
+    }
+
+    .hero h1 {
+      font-family: 'IBM Plex Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 4.2vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      max-width: 700px;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards 0.2s;
+    }
+
+    .hero-sub {
+      margin-top: 28px;
+      max-width: 480px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      line-height: 1.9;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards 0.3s;
+    }
+
+    .hero-actions {
+      margin-top: 44px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards 0.4s;
+    }
+
+    .btn-primary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      background: var(--steel);
+      color: var(--white);
+      font-weight: 400;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { background: var(--steel-hi); }
+
+    .btn-outline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid var(--border2);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+      display: inline-block;
+    }
+
+    .btn-outline:hover { border-color: var(--steel); color: var(--steel-hi); }
+
+    /* ── RULE ── */
+    .rule {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 52px;
+    }
+    .rule div { height: 1px; background: var(--border); }
+
+    /* ── SECTION ── */
+    .section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 52px;
+    }
+
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-family: 'IBM Plex Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+      letter-spacing: 0;
+      color: var(--white);
+      margin-bottom: 14px;
+      line-height: 1.15;
+    }
+
+    .section-body {
+      color: var(--text-dim);
+      max-width: 520px;
+      font-size: 0.84rem;
+      line-height: 1.9;
+    }
+
+    /* ── DOCTRINE STACK ── */
+    .doctrine-grid {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .doctrine-item {
+      display: grid;
+      grid-template-columns: 52px 96px 1fr auto;
+      align-items: stretch;
+      gap: 0;
+      background: var(--bg2);
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.12s;
+      position: relative;
+    }
+
+    .doctrine-item::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--steel);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .doctrine-item:hover { background: var(--bg3); }
+    .doctrine-item:hover::before { opacity: 1; }
+
+    .doc-num-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .doc-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      color: var(--text-lo);
+    }
+
+    .doc-code-col {
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      border-right: 1px solid var(--border);
+    }
+
+    .doc-code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      color: var(--steel-hi);
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+
+    .doc-info {
+      padding: 24px 28px;
+    }
+
+    .doc-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--white);
+      margin-bottom: 5px;
+      letter-spacing: 0;
+    }
+
+    .doc-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .doc-badge-col {
+      display: flex;
+      align-items: center;
+      padding: 0 24px 0 0;
+    }
+
+    .doc-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 4px 9px;
+      border: 1px solid var(--border2);
+      color: var(--text-lo);
+      white-space: nowrap;
+    }
+
+    /* ── ABOUT STRIP ── */
+    .about-strip {
+      position: relative;
+      z-index: 1;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 72px 52px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .about-inner h2 {
+      font-family: 'IBM Plex Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.1rem, 2vw, 1.55rem);
+      color: var(--white);
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+
+    .about-inner p {
+      color: var(--text-dim);
+      font-size: 0.84rem;
+      line-height: 1.9;
+      margin-bottom: 14px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .stat-item {
+      padding: 24px 20px;
+      background: var(--bg3);
+    }
+
+    .stat-num {
+      font-family: 'IBM Plex Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--steel-hi);
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.54rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    /* ── PULL QUOTE ── */
+    .pullquote-strip {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pullquote-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 52px;
+      display: grid;
+      grid-template-columns: 3px 1fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    .pullquote-bar {
+      background: var(--steel-dim);
+      width: 3px;
+      align-self: stretch;
+      min-height: 100%;
+    }
+
+    .pullquote-text {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+      line-height: 1.7;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .pullquote-source {
+      margin-top: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.18em;
+      color: var(--text-lo);
+      text-transform: uppercase;
+      font-style: normal;
+    }
+
+    /* ── IP NOTICE ── */
+    .ip-notice {
+      position: relative;
+      z-index: 1;
+      background: var(--bg3);
+      border-top: 1px solid var(--border);
+    }
+
+    .ip-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 52px;
+    }
+
+    .ip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 28px;
+    }
+
+    .ip-block h4 {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.76rem;
+      margin-bottom: 14px;
+      color: var(--text-dim);
+      letter-spacing: 0.01em;
+    }
+
+    .ip-block ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+    .ip-block ul li {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.64rem;
+      color: var(--text-lo);
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .ip-block ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--steel-dim);
+    }
+
+    .ip-disclaimer {
+      margin-top: 36px;
+      padding: 22px 24px;
+      border-left: 2px solid var(--steel-dim);
+      background: rgba(61,90,128,0.04);
+    }
+
+    .ip-disclaimer p {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.63rem;
+      color: var(--text-lo);
+      line-height: 1.85;
+    }
+
+    .ip-disclaimer p + p { margin-top: 10px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 400;
+      font-size: 0.64rem;
+      letter-spacing: 0.18em;
+      color: var(--steel-hi);
+      text-transform: uppercase;
+    }
+
+    .footer-note {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      color: var(--text-lo);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 90px 24px 56px; }
+      .section { padding: 56px 24px; }
+      .rule { padding: 0 24px; }
+      .doctrine-item { grid-template-columns: 40px 1fr; }
+      .doc-code-col { display: none; }
+      .doc-badge-col { display: none; }
+      .about-inner { grid-template-columns: 1fr; gap: 40px; padding: 52px 24px; }
+      .pullquote-inner { padding: 44px 24px; }
+      .ip-grid { grid-template-columns: 1fr; gap: 28px; }
+      .ip-inner { padding: 48px 24px; }
+      footer { flex-direction: column; gap: 14px; padding: 36px 24px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-wordmark" href="index.html">Zyzyx Authority System™</a>
+    <ul class="nav-links">
+      <li><a href="#doctrine">Doctrine</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="doctrine-map.html">Framework Map</a></li>
+      <li><a href="https://github.com/emmrex01/authority-at-execution" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-tag">Governance · Authority · Execution · AI · Robotics · Autonomous Systems</p>
+    <h1>MOST AI GOVERNANCE<br />FAILS DURING<br />OPERATION</h1>
+    <p class="hero-sub">
+      Operational governance, authority validation, and execution-time accountability frameworks for AI, robotics, and autonomous systems.
+    </p>
+    <div class="hero-actions">
+      <a href="publications.html" class="btn-primary">View Publications</a>
+      <a href="doctrine-map.html" class="btn-outline">Doctrine Map</a>
+    </div>
+  </section>
+
+  <div class="rule"><div></div></div>
+
+  <!-- DOCTRINE STACK -->
+  <section class="section" id="doctrine">
+    <p class="section-label">Foundation Stack · Phase I Release</p>
+    <h2 class="section-title">Core Publication Stack</h2>
+    <p class="section-body">
+      Foundational doctrine papers sequenced from public understanding through governance architecture to execution-layer infrastructure. Each paper builds on the last.
+    </p>
+
+    <div class="doctrine-grid">
+
+      <a href="docs/ZTX-LTH-001-Letter-to-Humanity.pdf" class="doctrine-item" target="_blank">
+        <div class="doc-num-col"><span class="doc-number">01</span></div>
+        <div class="doc-code-col"><div class="doc-code">ZTX-LTH-001</div></div>
+        <div class="doc-info">
+          <div class="doc-title">Letter to Humanity</div>
+          <div class="doc-desc">A Citizen's Foundation for Automated Society. Human accountability, democratic safeguards, automation awareness. The public entry point into the governance ecosystem.</div>
+        </div>
+        <div class="doc-badge-col"><span class="doc-badge">Foundation</span></div>
+      </a>
+
+      <a href="docs/PAGF-002-Public-Automation-Governance-Framework.pdf" class="doctrine-item" target="_blank">
+        <div class="doc-num-col"><span class="doc-number">02</span></div>
+        <div class="doc-code-col"><div class="doc-code">PAGF-002</div></div>
+        <div class="doc-info">
+          <div class="doc-title">Public Automation Governance Framework</div>
+          <div class="doc-desc">Governance requirements, government and business obligations, oversight structures, and accountability models for automated systems.</div>
+        </div>
+        <div class="doc-badge-col"><span class="doc-badge">Governance</span></div>
+      </a>
+
+      <a href="docs/AVE-003-Authority-at-Execution.pdf" class="doctrine-item" target="_blank">
+        <div class="doc-num-col"><span class="doc-number">03</span></div>
+        <div class="doc-code-col"><div class="doc-code">AVE-003</div></div>
+        <div class="doc-info">
+          <div class="doc-title">Authority at Execution</div>
+          <div class="doc-desc">Why systems fail during operation and why authentication alone is insufficient. Permission vs authority. Execution-layer validation explained.</div>
+        </div>
+        <div class="doc-badge-col"><span class="doc-badge">Architecture</span></div>
+      </a>
+
+      <a href="docs/HAFCF-004-Human-Authority-Failure-Continuity-Framework.pdf" class="doctrine-item" target="_blank">
+        <div class="doc-num-col"><span class="doc-number">04</span></div>
+        <div class="doc-code-col"><div class="doc-code">HAFCF-004</div></div>
+        <div class="doc-info">
+          <div class="doc-title">Human Authority Failure &amp; Continuity Framework</div>
+          <div class="doc-desc">Mechanics of authority failure and continuity infrastructure. How human accountability degrades in autonomous and AI-assisted systems.</div>
+        </div>
+        <div class="doc-badge-col"><span class="doc-badge">Framework</span></div>
+      </a>
+
+      <a href="docs/FJF-005-Failure-Justification-Framework.pdf" class="doctrine-item" target="_blank">
+        <div class="doc-num-col"><span class="doc-number">05</span></div>
+        <div class="doc-code-col"><div class="doc-code">FJF-005</div></div>
+        <div class="doc-info">
+          <div class="doc-title">Failure Justification Framework</div>
+          <div class="doc-desc">Structured analysis of operational failure patterns and justification doctrine for autonomous systems.</div>
+        </div>
+        <div class="doc-badge-col"><span class="doc-badge">Analysis</span></div>
+      </a>
+
+      <div class="doctrine-item" style="opacity:0.3;pointer-events:none;">
+        <div class="doc-num-col"><span class="doc-number">06–11</span></div>
+        <div class="doc-code-col"><div class="doc-code">HBAI · HAS<br/>FLAIG · ATM<br/>AIF · RSGD</div></div>
+        <div class="doc-info">
+          <div class="doc-title">Extended Doctrine Stack</div>
+          <div class="doc-desc">Additional governance frameworks, human-bound AI doctrine, authority models, and implementation architecture. Publishing progressively.</div>
+        </div>
+        <div class="doc-badge-col"><span class="doc-badge">Forthcoming</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="rule"><div></div></div>
+
+  <!-- ABOUT STRIP -->
+  <div class="about-strip">
+    <div class="about-inner">
+      <div>
+        <h2>Governance Cannot Only Exist Before Deployment</h2>
+        <p>
+          Most current approaches to AI and autonomous system safety focus on perception, navigation, capability, and post-incident investigation. They miss the execution-layer governance problem.
+        </p>
+        <p>
+          Authority, legitimacy, safety conditions, and operational justification must be validated while systems are actively running — not only at login, approval, or after a failure.
+        </p>
+        <a href="doctrine-map.html" class="btn-outline" style="margin-top:8px;display:inline-block;">Explore the Framework</a>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-num">11</div>
+          <div class="stat-label">Foundation Papers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">v1</div>
+          <div class="stat-label">Phase One Release</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">5</div>
+          <div class="stat-label">Published Now</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Expandable Architecture</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PULL QUOTE -->
+  <div class="pullquote-strip">
+    <div class="pullquote-inner">
+      <div class="pullquote-bar"></div>
+      <div>
+        <div class="pullquote-text">
+          This is now crossing from GitHub repo into emerging governance institution aesthetic. It feels coherent. Not just documents. Not just branding. A system.
+        </div>
+        <div class="pullquote-source">— Independent Governance Reviewer, May 2025</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IP NOTICE -->
+  <div class="ip-notice">
+    <div class="ip-inner">
+      <p class="section-label">Public Doctrine · Intellectual Property Notice</p>
+      <div class="ip-grid">
+        <div class="ip-block">
+          <h4>These publications are intended for:</h4>
+          <ul>
+            <li>Governance discussion and institutional consideration</li>
+            <li>Safety and standards dialogue</li>
+            <li>Public doctrine development</li>
+            <li>Autonomous systems governance exploration</li>
+            <li>Operational accountability research</li>
+            <li>AV / robotics safety governance discussion</li>
+          </ul>
+        </div>
+        <div class="ip-block">
+          <h4>These publications are NOT released as:</h4>
+          <ul>
+            <li>Implementation specifications or production infrastructure</li>
+            <li>Deployable autonomous control systems</li>
+            <li>Robotics execution software or source-code disclosure</li>
+            <li>Unrestricted commercial implementation rights</li>
+            <li>Open licence for derivative execution-layer systems</li>
+            <li>Authority to replicate or commercialise protected architecture</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ip-disclaimer">
+        <p>These publications form part of the broader Zyzyx Authority System™ governance ecosystem. Certain concepts, governance structures, operational models, validation architectures, authority frameworks, continuity systems, and execution-layer control concepts described within these publications may be subject to existing intellectual property protections, pending patent filings, future patent filings, protected trade-secret infrastructure, and unpublished implementation architecture.</p>
+        <p>No licence is granted to reproduce proprietary infrastructure, derive implementation architecture, replicate operational systems, commercialise derivative governance systems, or deploy protected execution-layer infrastructure without explicit written permission from Zyzyx Authority System™.</p>
+        <p>These publications should be interpreted as governance doctrine, conceptual architecture, standards-oriented discussion, and institutional framework material — not as open implementation specifications or unrestricted deployment rights.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">Zyzyx Authority System™</span>
+    <span class="footer-note">© 2025 Zyzyx Authority System™ · All doctrine and IP rights reserved</span>
+  </footer>
+
+</body>
+</html>

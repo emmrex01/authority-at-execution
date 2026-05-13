@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Zyzyx Authority System — Doctrine Map. Visual architecture of the governance stack, authority flow, and execution validation lifecycle." />
+  <title>Framework Map — Zyzyx Authority System™</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:         #06090f;
+      --bg2:        #0a0e17;
+      --bg3:        #080c14;
+      --surface:    #0f1520;
+      --border:     rgba(255,255,255,0.06);
+      --border2:    rgba(255,255,255,0.1);
+      --steel:      #4a6fa5;
+      --steel-lo:   #2d4a78;
+      --steel-hi:   #5b7fb8;
+      --text:       #d4dae6;
+      --text-lo:    #8a95a8;
+      --muted:      #525f72;
+      --accent:     #4a6fa5;
+      --danger:     #8b4040;
+      --danger-hi:  #b05555;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(74,111,165,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,111,165,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 56px;
+      background: rgba(6,9,15,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-wordmark {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      color: var(--text);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-lo); }
+
+    .page-header {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 112px 48px 56px;
+    }
+
+    .page-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards 0.1s;
+    }
+
+    .page-header h1 {
+      font-family: 'IBM Plex Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3rem);
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.05;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards 0.2s;
+    }
+
+    .page-header p {
+      margin-top: 20px;
+      max-width: 520px;
+      color: var(--text-lo);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards 0.3s;
+    }
+
+    .map-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+
+    .map-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--steel);
+      margin-bottom: 20px;
+    }
+
+    /* LAYER STACK */
+    .layers-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 56px;
+    }
+
+    .layer-row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      background: var(--bg2);
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    .layer-row:nth-child(1) { animation-delay: 0.1s; }
+    .layer-row:nth-child(2) { animation-delay: 0.18s; }
+    .layer-row:nth-child(3) { animation-delay: 0.26s; }
+    .layer-row:nth-child(4) { animation-delay: 0.34s; }
+    .layer-row:nth-child(5) { animation-delay: 0.42s; opacity: 0.4; }
+
+    .layer-label {
+      padding: 20px 16px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .layer-stripe {
+      width: 2px;
+      height: 100%;
+      position: absolute;
+      left: 0; top: 0;
+    }
+
+    .layer-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .layer-name {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-lo);
+      line-height: 1.3;
+    }
+
+    .layer-content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .layer-cell {
+      background: var(--bg);
+      padding: 18px 20px;
+      transition: background 0.15s;
+    }
+
+    .layer-cell:hover { background: var(--surface); }
+
+    .cell-code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.54rem;
+      letter-spacing: 0.14em;
+      color: var(--steel);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .cell-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.78rem;
+      line-height: 1.3;
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+
+    .cell-desc {
+      font-size: 0.7rem;
+      color: var(--text-lo);
+      line-height: 1.5;
+    }
+
+    /* GAP DIAGRAM */
+    .gap-section { margin-bottom: 56px; opacity: 0; animation: fadeUp 0.5s ease forwards 0.5s; }
+
+    .gap-diagram {
+      display: grid;
+      grid-template-columns: 1fr 96px 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .gap-col {
+      background: var(--bg2);
+      padding: 24px;
+    }
+
+    .gap-col-danger { background: rgba(139,64,64,0.06); }
+    .gap-col-success { background: rgba(74,111,165,0.06); }
+
+    .gap-col-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .gap-col-title.danger { color: var(--danger-hi); }
+    .gap-col-title.success { color: var(--steel-hi); }
+
+    .gap-flow { display: flex; flex-direction: column; gap: 12px; }
+
+    .gap-step { display: flex; align-items: flex-start; gap: 10px; }
+
+    .gap-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .gap-dot.red { background: var(--danger-hi); }
+    .gap-dot.blue { background: var(--steel-hi); }
+
+    .gap-step-text { font-size: 0.74rem; color: var(--text-lo); line-height: 1.5; }
+    .gap-step-text strong {
+      display: block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .gap-middle {
+      background: rgba(139,64,64,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 12px;
+      border-left: 1px solid rgba(139,64,64,0.2);
+      border-right: 1px solid rgba(139,64,64,0.2);
+    }
+
+    .gap-middle-icon { font-size: 1.4rem; margin-bottom: 10px; }
+
+    .gap-middle-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 0.56rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--danger-hi);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* FLOW LIFECYCLE */
+    .flow-section { margin-bottom: 56px; opacity: 0; animation: fadeUp 0.5s ease forwards 0.6s; }
+
+    .flow-diagram {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .flow-step {
+      background: var(--bg2);
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: background 0.15s;
+    }
+
+    .flow-step:hover { background: var(--surface); }
+    .flow-step.hl { background: rgba(74,111,165,0.07); }
+
+    .flow-step-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.54rem;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .flow-icon { font-size: 1.1rem; margin-bottom: 10px; }
+
+    .flow-title {
+      font-family: 'IBM Plex Sans', monospace;
+      font-weight: 600;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .flow-desc { font-size: 0.66rem; color: var(--text-lo); line-height: 1.5; }
+
+    /* RELATION MAP */
+    .relation-section { opacity: 0; animation: fadeUp 0.5s ease forwards 0.7s; }
+
+    .relation-map {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .relation-row {
+      display: grid;
+      grid-template-columns: 20px 260px 1fr;
+      background: var(--bg2);
+    }
+
+    .rel-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--bg);
+    }
+
+    .rel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--steel);
+      flex-shrink: 0;
+      margin-top: 24px;
+    }
+
+    .rel-line {
+      width: 1px;
+      flex: 1;
+      background: var(--steel-lo);
+      opacity: 0.3;
+      margin: 3px 0;
+    }
+
+    .relation-row:last-child .rel-line { display: none; }
+
+    .rel-paper {
+      padding: 18px 20px;
+      border-right: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .rel-paper:hover { background: var(--surface); }
+
+    .rel-code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.14em;
+      color: var(--steel);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .rel-title {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .rel-explains {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+    }
+
+    .rel-explains-text {
+      font-size: 0.76rem;
+      color: var(--text-lo);
+      line-height: 1.6;
+    }
+
+    .rel-explains-text em {
+      font-style: normal;
+      color: var(--text);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      color: var(--text-lo);
+      text-transform: uppercase;
+    }
+
+    .footer-note {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .page-header { padding: 96px 24px 48px; }
+      .map-container { padding: 0 24px 64px; }
+      .layer-row { grid-template-columns: 1fr; }
+      .layer-label { border-right: none; border-bottom: 1px solid var(--border); }
+      .layer-content { grid-template-columns: 1fr; }
+      .gap-diagram { grid-template-columns: 1fr; }
+      .flow-diagram { grid-template-columns: repeat(2, 1fr); }
+      .relation-row { grid-template-columns: 20px 1fr; }
+      .rel-explains { display: none; }
+      footer { flex-direction: column; gap: 12px; padding: 36px 24px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-wordmark" href="index.html">Zyzyx Authority System™</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="doctrine-map.html" class="active">Framework Map</a></li>
+      <li><a href="https://github.com/emmrex01/authority-at-execution" target="_blank">GitHub ↗</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <p class="page-tag">Visual Architecture · Doctrine Map · Phase I</p>
+    <h1>Governance Architecture<br />Framework Map</h1>
+    <p>How the doctrine stack connects — from public foundation through governance architecture to execution-layer infrastructure. Each layer builds on the last. Authority is continuous.</p>
+  </div>
+
+  <div class="map-container">
+
+    <!-- LAYER STACK -->
+    <div class="map-label" style="margin-bottom:20px;">Governance Stack · Layered Architecture</div>
+
+    <div class="layers-stack">
+
+      <div class="layer-row">
+        <div class="layer-label" style="border-left:3px solid var(--steel-hi);">
+          <div class="layer-num">Layer 0</div>
+          <div class="layer-name">Public & Human Foundation</div>
+        </div>
+        <div class="layer-content">
+          <div class="layer-cell">
+            <div class="cell-code">ZTX-LTH-001</div>
+            <div class="cell-title">Letter to Humanity</div>
+            <div class="cell-desc">Civic entry point. Human accountability, citizen rights, democratic safeguards.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Core Principle</div>
+            <div class="cell-title">Automation Must Serve People</div>
+            <div class="cell-desc">Technology does not hold authority. Humans remain accountable. Always.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Establishes</div>
+            <div class="cell-title">The Why</div>
+            <div class="cell-desc">Before governance structure comes the human and societal foundation.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-label" style="border-left:3px solid var(--steel);">
+          <div class="layer-num">Layer 1</div>
+          <div class="layer-name">Institutional Governance</div>
+        </div>
+        <div class="layer-content">
+          <div class="layer-cell">
+            <div class="cell-code">PAGF-002</div>
+            <div class="cell-title">Public Automation Governance Framework</div>
+            <div class="cell-desc">Government obligations, oversight structures, accountability models.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Core Principle</div>
+            <div class="cell-title">Governance is Continuous</div>
+            <div class="cell-desc">Not only before deployment. Not only after failure. During operation.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Establishes</div>
+            <div class="cell-title">The Governance Structure</div>
+            <div class="cell-desc">Conditions required for legitimate automated systems in democratic societies.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-label" style="border-left:3px solid var(--steel-lo);">
+          <div class="layer-num">Layer 2</div>
+          <div class="layer-name">Execution-Layer Doctrine</div>
+        </div>
+        <div class="layer-content">
+          <div class="layer-cell">
+            <div class="cell-code">AVE-003</div>
+            <div class="cell-title">Authority at Execution</div>
+            <div class="cell-desc">Why systems fail during operation. Permission vs authority. Execution-layer validation.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Core Principle</div>
+            <div class="cell-title">Authority at the Moment of Action</div>
+            <div class="cell-desc">Authentication is not authority. Authority must be validated at each execution point.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Establishes</div>
+            <div class="cell-title">The Core Philosophy</div>
+            <div class="cell-desc">Why validating permission at startup or login is insufficient for autonomous systems.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-label" style="border-left:3px solid #6b5a2d;">
+          <div class="layer-num">Layer 3</div>
+          <div class="layer-name">Failure & Continuity</div>
+        </div>
+        <div class="layer-content">
+          <div class="layer-cell">
+            <div class="cell-code">HAFCF-004</div>
+            <div class="cell-title">Human Authority Failure & Continuity</div>
+            <div class="cell-desc">How human accountability breaks down. Continuity failure conditions.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">FJF-005</div>
+            <div class="cell-title">Failure Justification Framework</div>
+            <div class="cell-desc">Structured analysis of operational failure patterns. Justification doctrine.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">Establishes</div>
+            <div class="cell-title">The Failure Architecture</div>
+            <div class="cell-desc">How autonomous systems progressively separate action from accountable human authority.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-label" style="border-left:3px solid var(--muted);">
+          <div class="layer-num">Layer 4+</div>
+          <div class="layer-name">Extended Doctrine Stack</div>
+        </div>
+        <div class="layer-content">
+          <div class="layer-cell">
+            <div class="cell-code">HBAI · HAS</div>
+            <div class="cell-title">Human-Bound AI & Authority Systems</div>
+            <div class="cell-desc">Human-bound AI doctrine and authority system architecture.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">FLAIG · ATM · AIF</div>
+            <div class="cell-title">Advanced Frameworks</div>
+            <div class="cell-desc">Failure layer AI governance, authority trust models, authority inference frameworks.</div>
+          </div>
+          <div class="layer-cell">
+            <div class="cell-code">RSGD</div>
+            <div class="cell-title">Robotics Systems Governance</div>
+            <div class="cell-desc">Governance architecture for physical robotics systems in real-world environments.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EXECUTION GAP -->
+    <div class="gap-section">
+      <div class="map-label">The Execution Gap · Why Systems Fail During Operation</div>
+      <div class="gap-diagram">
+        <div class="gap-col gap-col-danger">
+          <div class="gap-col-title danger">Traditional Model — Gap Remains Open</div>
+          <div class="gap-flow">
+            <div class="gap-step"><div class="gap-dot red"></div><div class="gap-step-text"><strong>User Login / Authentication</strong>Identity verified. Access approved.</div></div>
+            <div class="gap-step"><div class="gap-dot red"></div><div class="gap-step-text"><strong>Permission Granted</strong>Broad permission granted — assumed valid.</div></div>
+            <div class="gap-step"><div class="gap-dot red"></div><div class="gap-step-text"><strong>Action Executes</strong>System performs action at the time.</div></div>
+            <div class="gap-step"><div class="gap-dot red"></div><div class="gap-step-text"><strong>Context Drifts</strong>Conditions, intent, environment changes.</div></div>
+            <div class="gap-step"><div class="gap-dot red"></div><div class="gap-step-text"><strong>Failure Occurs</strong>Action continues without legitimate authority. Harm occurs.</div></div>
+          </div>
+        </div>
+        <div class="gap-middle">
+          <div class="gap-middle-icon">⚠</div>
+          <div class="gap-middle-label">The<br/>Execution<br/>Gap</div>
+        </div>
+        <div class="gap-col gap-col-success">
+          <div class="gap-col-title success">Authority at Execution — Gap Is Closed</div>
+          <div class="gap-flow">
+            <div class="gap-step"><div class="gap-dot blue"></div><div class="gap-step-text"><strong>User Login / Authentication</strong>Identity verified. Access approved.</div></div>
+            <div class="gap-step"><div class="gap-dot blue"></div><div class="gap-step-text"><strong>Initial Authority Validation</strong>Authority validated for current context and operational conditions.</div></div>
+            <div class="gap-step"><div class="gap-dot blue"></div><div class="gap-step-text"><strong>Continuous Authority Checkpoints</strong>Context assessed and verified at each execution point.</div></div>
+            <div class="gap-step"><div class="gap-dot blue"></div><div class="gap-step-text"><strong>Continuous Governance Presence</strong>Authority re-validated continuously against current context.</div></div>
+            <div class="gap-step"><div class="gap-dot blue"></div><div class="gap-step-text"><strong>Action Executes Safely</strong>Action executed only when authority is valid at moment of execution.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUTHORITY LIFECYCLE -->
+    <div class="flow-section">
+      <div class="map-label">Authority Validation Lifecycle · Continuous Governance Loop</div>
+      <div class="flow-diagram">
+        <div class="flow-step">
+          <div class="flow-step-num">01</div>
+          <div class="flow-icon">◎</div>
+          <div class="flow-title">Identity & Access</div>
+          <div class="flow-desc">Human identity verified. Initial access approved.</div>
+        </div>
+        <div class="flow-step hl">
+          <div class="flow-step-num">02</div>
+          <div class="flow-icon">▣</div>
+          <div class="flow-title">Authority Validated</div>
+          <div class="flow-desc">Authority confirmed for current context, intent, and conditions.</div>
+        </div>
+        <div class="flow-step hl">
+          <div class="flow-step-num">03</div>
+          <div class="flow-icon">↺</div>
+          <div class="flow-title">Continuous Re-Validation</div>
+          <div class="flow-desc">Authority re-checked at every execution point. Not once. Every time.</div>
+        </div>
+        <div class="flow-step hl">
+          <div class="flow-step-num">04</div>
+          <div class="flow-icon">◈</div>
+          <div class="flow-title">Human Oversight</div>
+          <div class="flow-desc">Humans remain in the loop with right information at the right time.</div>
+        </div>
+        <div class="flow-step hl">
+          <div class="flow-step-num">05</div>
+          <div class="flow-icon">⊡</div>
+          <div class="flow-title">Adapt or Stop</div>
+          <div class="flow-desc">System adapts within boundaries or pauses for re-authorisation.</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">06</div>
+          <div class="flow-icon">✓</div>
+          <div class="flow-title">Safe Execution</div>
+          <div class="flow-desc">Action executes only when authority is valid. Harm is prevented.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATION MAP -->
+    <div class="relation-section">
+      <div class="map-label">Publication Relationship Map · How Papers Connect</div>
+      <div class="relation-map">
+
+        <div class="relation-row">
+          <div class="rel-connector"><div class="rel-dot"></div><div class="rel-line"></div></div>
+          <div class="rel-paper">
+            <div class="rel-code">ZTX-LTH-001 · Foundation</div>
+            <div class="rel-title">Letter to Humanity</div>
+          </div>
+          <div class="rel-explains">
+            <div class="rel-explains-text">Establishes <em>why governance matters</em> — the human and civic foundation. Entry point for public, researchers, policymakers, and institutional observers.</div>
+          </div>
+        </div>
+
+        <div class="relation-row">
+          <div class="rel-connector"><div class="rel-dot"></div><div class="rel-line"></div></div>
+          <div class="rel-paper">
+            <div class="rel-code">PAGF-002 · Governance</div>
+            <div class="rel-title">Public Automation Governance Framework</div>
+          </div>
+          <div class="rel-explains">
+            <div class="rel-explains-text">Moves from <em>why</em> to <em>what governance requires</em> — obligations, oversight, and accountability structures for automated systems.</div>
+          </div>
+        </div>
+
+        <div class="relation-row">
+          <div class="rel-connector"><div class="rel-dot"></div><div class="rel-line"></div></div>
+          <div class="rel-paper">
+            <div class="rel-code">AVE-003 · Architecture</div>
+            <div class="rel-title">Authority at Execution</div>
+          </div>
+          <div class="rel-explains">
+            <div class="rel-explains-text">Explains <em>why governance fails during operation</em> — the execution gap, permission vs authority, and why continuous validation is the missing layer.</div>
+          </div>
+        </div>
+
+        <div class="relation-row">
+          <div class="rel-connector"><div class="rel-dot"></div><div class="rel-line"></div></div>
+          <div class="rel-paper">
+            <div class="rel-code">HAFCF-004 · Framework</div>
+            <div class="rel-title">Human Authority Failure & Continuity</div>
+          </div>
+          <div class="rel-explains">
+            <div class="rel-explains-text">Maps <em>how authority breaks down</em> — the progressive separation of action from accountable human authority in autonomous systems.</div>
+          </div>
+        </div>
+
+        <div class="relation-row">
+          <div class="rel-connector"><div class="rel-dot"></div><div class="rel-line"></div></div>
+          <div class="rel-paper">
+            <div class="rel-code">FJF-005 · Analysis</div>
+            <div class="rel-title">Failure Justification Framework</div>
+          </div>
+          <div class="rel-explains">
+            <div class="rel-explains-text">Provides <em>structured failure analysis</em> — operational failure patterns, justification doctrine, and conditions under which systems become ungovernable.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span class="footer-logo">Zyzyx Authority System™</span>
+    <span class="footer-note">© 2025 Zyzyx Authority System™ · All doctrine and IP rights reserved</span>
+  </footer>
+
+</body>
+</html>
