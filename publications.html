@@ -6,23 +6,25 @@
   <meta name="description" content="Zyzyx Authority System — Full publication index. Governance doctrine for AI, autonomous vehicles, robotics, and execution-layer authority validation." />
   <title>Publications — Zyzyx Authority System™</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:         #06090f;
-      --bg2:        #0a0e17;
-      --bg3:        #080c14;
-      --surface:    #0f1520;
-      --border:     rgba(255,255,255,0.06);
-      --border2:    rgba(255,255,255,0.1);
-      --steel:      #4a6fa5;
-      --steel-lo:   #2d4a78;
-      --steel-hi:   #5b7fb8;
-      --text:       #d4dae6;
-      --text-lo:    #8a95a8;
-      --muted:      #525f72;
-      --gold:       #7a6535;
-      --gold-hi:    #a08845;
+      --bg:        #06080e;
+      --bg2:       #090d16;
+      --bg3:       #070a12;
+      --surface:   #0d1220;
+      --border:    rgba(255,255,255,0.055);
+      --border2:   rgba(255,255,255,0.1);
+      --steel:     #4a6080;
+      --steel-lo:  #2e4060;
+      --steel-hi:  #6080a8;
+      --steel-dim: #344e6a;
+      --text:      #cdd3e0;
+      --text-lo:   #8e99b0;
+      --muted:     #5a6478;
+      --white:     #e2e6f0;
+      --gold:      #6a5830;
+      --gold-hi:   #8a7840;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,7 +35,7 @@
       color: var(--text);
       font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 300;
-      line-height: 1.6;
+      line-height: 1.7;
       overflow-x: hidden;
     }
 
@@ -42,9 +44,9 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(74,111,165,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(74,111,165,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(74,96,128,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,96,128,0.028) 1px, transparent 1px);
+      background-size: 56px 56px;
       pointer-events: none;
       z-index: 0;
     }
@@ -58,8 +60,8 @@
       justify-content: space-between;
       padding: 0 48px;
       height: 56px;
-      background: rgba(6,9,15,0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(6,8,14,0.96);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
     }
 
@@ -67,7 +69,7 @@
       font-family: 'IBM Plex Mono', monospace;
       font-weight: 500;
       font-size: 0.72rem;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.14em;
       color: var(--text);
       text-decoration: none;
       text-transform: uppercase;
@@ -76,8 +78,8 @@
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
       color: var(--muted);
       text-decoration: none;
       text-transform: uppercase;
@@ -95,10 +97,10 @@
 
     .page-tag {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--steel);
+      color: var(--steel-hi);
       margin-bottom: 24px;
       opacity: 0;
       animation: fadeUp 0.5s ease forwards 0.1s;
@@ -111,7 +113,7 @@
       text-transform: uppercase;
       letter-spacing: 0.01em;
       line-height: 1.05;
-      color: var(--text);
+      color: var(--white);
       opacity: 0;
       animation: fadeUp 0.5s ease forwards 0.2s;
     }
@@ -120,7 +122,7 @@
       margin-top: 20px;
       max-width: 520px;
       color: var(--text-lo);
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       line-height: 1.8;
       opacity: 0;
       animation: fadeUp 0.5s ease forwards 0.3s;
@@ -144,6 +146,7 @@
       background: var(--bg2);
       border: 1px solid var(--border);
       border-bottom: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
 
     .pub-group-stripe {
@@ -153,24 +156,24 @@
     }
 
     .pub-group-stripe.phase1 { background: var(--steel-hi); }
-    .pub-group-stripe.ext { background: var(--muted); }
+    .pub-group-stripe.ext { background: var(--steel-dim); }
     .pub-group-stripe.av { background: var(--gold-hi); }
 
     .pub-group-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
     }
 
     .pub-group-label.phase1 { color: var(--steel-hi); }
-    .pub-group-label.ext { color: var(--muted); }
+    .pub-group-label.ext { color: var(--text-lo); }
     .pub-group-label.av { color: var(--gold-hi); }
 
     .pub-group-title {
       font-family: 'IBM Plex Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.82rem;
+      font-weight: 500;
+      font-size: 0.84rem;
       color: var(--text-lo);
     }
 
@@ -183,7 +186,7 @@
 
     .pub-item {
       display: grid;
-      grid-template-columns: 48px 80px 1fr auto;
+      grid-template-columns: 48px 88px 1fr auto;
       align-items: center;
       gap: 0;
       background: var(--bg);
@@ -192,6 +195,7 @@
       transition: background 0.15s;
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
     }
 
     .pub-item::before {
@@ -199,7 +203,7 @@
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 2px;
-      background: var(--steel);
+      background: var(--steel-hi);
       transform: scaleY(0);
       transform-origin: bottom;
       transition: transform 0.25s ease;
@@ -209,7 +213,7 @@
     .pub-item:hover::before { transform: scaleY(1); }
 
     .pub-item.forthcoming {
-      opacity: 0.35;
+      opacity: 0.5;
       cursor: default;
       pointer-events: none;
     }
@@ -219,9 +223,10 @@
     .pub-num {
       padding: 20px 0 20px 20px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.14em;
-      color: var(--muted);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--steel-hi);
       border-right: 1px solid var(--border);
       align-self: stretch;
       display: flex;
@@ -231,9 +236,9 @@
     .pub-code {
       padding: 20px 16px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.56rem;
+      font-size: 0.6rem;
       letter-spacing: 0.1em;
-      color: var(--steel);
+      color: var(--steel-hi);
       border-right: 1px solid var(--border);
       align-self: stretch;
       display: flex;
@@ -247,14 +252,14 @@
       font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 600;
       font-size: 0.9rem;
-      margin-bottom: 4px;
-      color: var(--text);
+      margin-bottom: 5px;
+      color: var(--white);
     }
 
     .pub-desc {
-      font-size: 0.76rem;
+      font-size: 0.8rem;
       color: var(--text-lo);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .pub-meta {
@@ -269,22 +274,22 @@
 
     .pub-badge {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.52rem;
-      letter-spacing: 0.14em;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 4px 10px;
-      border: 1px solid var(--border2);
-      color: var(--muted);
+      padding: 5px 11px;
+      border: 1px solid var(--steel-dim);
+      color: var(--text-lo);
       white-space: nowrap;
     }
 
-    .pub-badge.av { border-color: rgba(160,136,69,0.3); color: var(--gold-hi); }
-    .pub-badge.live { border-color: rgba(74,111,165,0.3); color: var(--steel-hi); }
+    .pub-badge.av { border-color: rgba(138,120,64,0.35); color: var(--gold-hi); }
+    .pub-badge.live { border-color: var(--steel-dim); color: var(--steel-hi); }
 
     .pub-date {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.52rem;
-      letter-spacing: 0.1em;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
       color: var(--muted);
     }
 
@@ -299,26 +304,27 @@
       max-width: 1100px;
       margin: 0 auto;
       padding: 48px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .ip-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.22em;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--steel);
-      margin-bottom: 20px;
+      color: var(--steel-hi);
+      margin-bottom: 6px;
     }
 
     .ip-inner p {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.64rem;
+      font-size: 0.66rem;
       color: var(--muted);
       line-height: 1.85;
       max-width: 800px;
     }
-
-    .ip-inner p + p { margin-top: 12px; }
 
     footer {
       position: relative;
@@ -335,16 +341,16 @@
     .footer-logo {
       font-family: 'IBM Plex Mono', monospace;
       font-weight: 500;
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
       color: var(--text-lo);
       text-transform: uppercase;
     }
 
     .footer-note {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.08em;
+      font-size: 0.62rem;
+      letter-spacing: 0.07em;
       color: var(--muted);
     }
 
@@ -453,43 +459,61 @@
       <div class="pub-group-header">
         <div class="pub-group-stripe ext"></div>
         <span class="pub-group-label ext">Extended Stack</span>
-        <span class="pub-group-title">Advanced Governance Doctrine — Publishing Progressively</span>
+        <span class="pub-group-title">Advanced Governance Doctrine — Published 2025</span>
       </div>
       <div class="pub-list">
 
         <a href="docs/HBAI-006-Human-Bound-Artificial-Intelligence.pdf" class="pub-item" target="_blank">
           <span class="pub-num">06</span><span class="pub-code">HBAI-006</span>
-          <div class="pub-info"><div class="pub-title">Human-Bound Artificial Intelligence</div><div class="pub-desc">Human-bound AI doctrine, binding frameworks, and authority constraint architecture.</div></div>
+          <div class="pub-info">
+            <div class="pub-title">Human-Bound Artificial Intelligence</div>
+            <div class="pub-desc">Human-bound AI doctrine, binding frameworks, and authority constraint architecture for AI systems.</div>
+          </div>
           <div class="pub-meta"><span class="pub-badge live">Framework</span><span class="pub-date">2025</span></div>
         </a>
 
         <a href="docs/HAS-007-Human-Authority-Systems.pdf" class="pub-item" target="_blank">
           <span class="pub-num">07</span><span class="pub-code">HAS-007</span>
-          <div class="pub-info"><div class="pub-title">Human Authority Systems</div><div class="pub-desc">Authority system architecture, validation models, and human-bound operational governance infrastructure.</div></div>
+          <div class="pub-info">
+            <div class="pub-title">Human Authority Systems</div>
+            <div class="pub-desc">Authority system architecture, validation models, and human-bound operational governance infrastructure.</div>
+          </div>
           <div class="pub-meta"><span class="pub-badge live">Architecture</span><span class="pub-date">2025</span></div>
         </a>
 
         <a href="docs/FLAIG-008-Foundational-Laws-of-AI-Governance.pdf" class="pub-item" target="_blank">
           <span class="pub-num">08</span><span class="pub-code">FLAIG-008</span>
-          <div class="pub-info"><div class="pub-title">Foundational Laws of AI Governance</div><div class="pub-desc">Governance architecture at the failure layer — where AI systems lose alignment and human authority degrades.</div></div>
+          <div class="pub-info">
+            <div class="pub-title">Foundational Laws of AI Governance</div>
+            <div class="pub-desc">Governance architecture at the failure layer — where AI systems lose alignment and human authority degrades.</div>
+          </div>
           <div class="pub-meta"><span class="pub-badge live">Governance</span><span class="pub-date">2025</span></div>
         </a>
 
         <a href="docs/ATM-009-Authority-and-Trust-Model.pdf" class="pub-item" target="_blank">
           <span class="pub-num">09</span><span class="pub-code">ATM-009</span>
-          <div class="pub-info"><div class="pub-title">Authority and Trust Model</div><div class="pub-desc">Trust architecture for autonomous systems. How trust is established, validated, and withdrawn during operation.</div></div>
+          <div class="pub-info">
+            <div class="pub-title">Authority and Trust Model</div>
+            <div class="pub-desc">Trust architecture for autonomous systems. How trust is established, validated, and withdrawn during operation.</div>
+          </div>
           <div class="pub-meta"><span class="pub-badge live">Model</span><span class="pub-date">2025</span></div>
         </a>
 
         <a href="docs/AIF-010-Authentication-Illusion-Framework.pdf" class="pub-item" target="_blank">
           <span class="pub-num">10</span><span class="pub-code">AIF-010</span>
-          <div class="pub-info"><div class="pub-title">Authentication Illusion Framework</div><div class="pub-desc">How authority is inferred, validated, and enforced in systems operating with incomplete operational context.</div></div>
+          <div class="pub-info">
+            <div class="pub-title">Authentication Illusion Framework</div>
+            <div class="pub-desc">How authority is inferred, validated, and enforced in systems operating with incomplete or ambiguous operational context.</div>
+          </div>
           <div class="pub-meta"><span class="pub-badge live">Framework</span><span class="pub-date">2025</span></div>
         </a>
 
         <div class="pub-item forthcoming">
           <span class="pub-num">11</span><span class="pub-code">RSGD-011</span>
-          <div class="pub-info"><div class="pub-title">Robotics Systems Governance Doctrine</div><div class="pub-desc">Governance architecture for physical robotics systems — authority, containment, and human-bound operation.</div></div>
+          <div class="pub-info">
+            <div class="pub-title">Robotics Systems Governance Doctrine</div>
+            <div class="pub-desc">Governance architecture for physical robotics systems — authority, containment, and human-bound operation in real-world environments.</div>
+          </div>
           <div class="pub-meta"><span class="pub-badge">Forthcoming</span></div>
         </div>
 
@@ -505,7 +529,8 @@
       </div>
       <div class="pub-list">
         <div class="pub-item forthcoming av-open">
-          <span class="pub-num">AV</span><span class="pub-code">AV-GOV</span>
+          <span class="pub-num">AV</span>
+          <span class="pub-code">AV-GOV</span>
           <div class="pub-info">
             <div class="pub-title">AV Governance Framework Stack</div>
             <div class="pub-desc">Four open governance papers for autonomous vehicle and robotics safety. Designed for public discussion, regulatory engagement, and industry standardisation. Publishing separately.</div>
