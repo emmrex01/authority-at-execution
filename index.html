@@ -10,20 +10,23 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:        #06080d;
-      --bg2:       #090c14;
-      --bg3:       #070a11;
+      /* warmer navy — classified systems archive not electric blue */
+      --bg:        #06080e;
+      --bg2:       #090d16;
+      --bg3:       #070a12;
+      --surface:   #0d1220;
       --border:    rgba(255,255,255,0.055);
-      --border2:   rgba(255,255,255,0.09);
-      --steel:     #3d5a80;
-      --steel-lo:  #2a3f5f;
-      --steel-hi:  #4e6f9a;
-      --steel-dim: #2e4560;
-      --text:      #c8cdd8;
-      --text-dim:  #7a8599;
-      --text-lo:   #4a5268;
-      --muted:     #3a4255;
-      --white:     #dde2ec;
+      --border2:   rgba(255,255,255,0.1);
+      /* warmer steel — deep infrastructure navy */
+      --steel:     #4a6080;
+      --steel-lo:  #2e4060;
+      --steel-hi:  #6080a8;
+      --steel-dim: #344e6a;
+      /* text — increased contrast throughout */
+      --text:      #cdd3e0;
+      --text-lo:   #8e99b0;
+      --muted:     #5a6478;
+      --white:     #e2e6f0;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,14 +42,14 @@
       overflow-x: hidden;
     }
 
-    /* Grid — very subtle, structural not decorative */
+    /* Grid — reduced opacity so content dominates */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(61,90,128,0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(61,90,128,0.035) 1px, transparent 1px);
+        linear-gradient(rgba(74,96,128,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74,96,128,0.028) 1px, transparent 1px);
       background-size: 56px 56px;
       pointer-events: none;
       z-index: 0;
@@ -60,33 +63,34 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 52px;
-      height: 52px;
-      background: rgba(6,8,13,0.97);
+      padding: 0 48px;
+      height: 56px;
+      background: rgba(6,8,14,0.96);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
     }
 
     .nav-wordmark {
       font-family: 'IBM Plex Mono', monospace;
-      font-weight: 400;
-      font-size: 0.68rem;
-      letter-spacing: 0.2em;
-      color: var(--steel-hi);
+      font-weight: 500;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: var(--text);
       text-decoration: none;
       text-transform: uppercase;
     }
 
-    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.14em;
-      color: var(--text-lo);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
       text-decoration: none;
       text-transform: uppercase;
       transition: color 0.15s;
     }
-    .nav-links a:hover { color: var(--text-dim); }
+    .nav-links a:hover { color: var(--text-lo); }
 
     /* ── HERO ── */
     .hero {
@@ -96,63 +100,79 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 110px 52px 80px;
+      padding: 112px 48px 80px;
       max-width: 1100px;
       margin: 0 auto;
     }
 
     .hero-tag {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.58rem;
-      letter-spacing: 0.24em;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--steel);
+      color: var(--steel-hi);
       margin-bottom: 36px;
       opacity: 0;
-      animation: fadeUp 0.4s ease forwards 0.1s;
+      animation: fadeUp 0.5s ease forwards 0.1s;
     }
 
+    /* Hero title — optical weighting per Alex */
     .hero h1 {
       font-family: 'IBM Plex Sans Condensed', sans-serif;
       font-weight: 700;
-      font-size: clamp(2rem, 4.2vw, 3.4rem);
-      line-height: 1.05;
+      font-size: clamp(2.8rem, 5.5vw, 5rem);
+      line-height: 1.0;
       letter-spacing: -0.01em;
-      max-width: 700px;
-      color: var(--white);
+      text-transform: uppercase;
+      max-width: 820px;
       opacity: 0;
-      animation: fadeUp 0.4s ease forwards 0.2s;
+      animation: fadeUp 0.5s ease forwards 0.25s;
     }
 
-    .hero-sub {
-      margin-top: 28px;
-      max-width: 480px;
-      color: var(--text-dim);
-      font-size: 0.85rem;
-      line-height: 1.9;
-      font-weight: 300;
+    .hero-line-dim { color: rgba(205,211,224,0.5); }
+    .hero-line-mid { color: rgba(205,211,224,0.75); }
+    .hero-line-bright { color: var(--white); }
+
+    .hero-rule {
+      margin: 32px 0;
+      width: 48px;
+      height: 2px;
+      background: var(--steel);
       opacity: 0;
-      animation: fadeUp 0.4s ease forwards 0.3s;
+      animation: fadeUp 0.5s ease forwards 0.4s;
+    }
+
+    /* Hero subtext — brighter, slightly larger */
+    .hero-sub {
+      max-width: 520px;
+      color: var(--text-lo);
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards 0.5s;
     }
 
     .hero-actions {
-      margin-top: 44px;
+      margin-top: 48px;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
       opacity: 0;
-      animation: fadeUp 0.4s ease forwards 0.4s;
+      animation: fadeUp 0.5s ease forwards 0.65s;
     }
 
+    /* Buttons — taller, tighter tracking, more authority */
     .btn-primary {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 12px 24px;
+      padding: 14px 28px;
       background: var(--steel);
-      color: var(--white);
-      font-weight: 400;
+      color: #06080e;
+      font-weight: 500;
       border: none;
       cursor: pointer;
       text-decoration: none;
@@ -164,30 +184,33 @@
 
     .btn-outline {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 12px 24px;
+      padding: 14px 28px;
       background: transparent;
-      color: var(--text-dim);
-      border: 1px solid var(--border2);
+      color: var(--text-lo);
+      border: 1px solid var(--steel-dim);
       cursor: pointer;
       text-decoration: none;
-      transition: border-color 0.15s, color 0.15s;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
       display: inline-block;
     }
 
-    .btn-outline:hover { border-color: var(--steel); color: var(--steel-hi); }
+    .btn-outline:hover {
+      border-color: var(--steel-hi);
+      color: var(--white);
+      background: rgba(74,96,128,0.1);
+    }
 
-    /* ── RULE ── */
-    .rule {
+    /* ── DIVIDER ── */
+    .full-divider {
       position: relative;
       z-index: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 52px;
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
     }
-    .rule div { height: 1px; background: var(--border); }
 
     /* ── SECTION ── */
     .section {
@@ -195,54 +218,59 @@
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 80px 52px;
+      padding: 80px 48px;
     }
 
+    /* Section labels — tighter tracking, more deliberate */
     .section-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.56rem;
-      letter-spacing: 0.26em;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--steel);
-      margin-bottom: 18px;
+      color: var(--steel-hi);
+      margin-bottom: 24px;
     }
 
     .section-title {
       font-family: 'IBM Plex Sans Condensed', sans-serif;
       font-weight: 700;
-      font-size: clamp(1.3rem, 2.4vw, 1.9rem);
-      letter-spacing: 0;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      margin-bottom: 16px;
       color: var(--white);
-      margin-bottom: 14px;
       line-height: 1.15;
     }
 
     .section-body {
-      color: var(--text-dim);
-      max-width: 520px;
-      font-size: 0.84rem;
-      line-height: 1.9;
+      color: var(--text-lo);
+      max-width: 560px;
+      font-size: 0.9rem;
+      line-height: 1.85;
     }
 
     /* ── DOCTRINE STACK ── */
     .doctrine-grid {
-      margin-top: 40px;
+      margin-top: 48px;
       display: grid;
       grid-template-columns: 1fr;
       gap: 1px;
       background: var(--border);
     }
 
+    /* Cards — slightly lighter bg + subtle inner shadow for archival depth */
     .doctrine-item {
       display: grid;
-      grid-template-columns: 52px 96px 1fr auto;
-      align-items: stretch;
+      grid-template-columns: 52px 80px 1fr auto;
+      align-items: center;
       gap: 0;
       background: var(--bg2);
       text-decoration: none;
       color: var(--text);
-      transition: background 0.12s;
+      transition: background 0.15s;
       position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
 
     .doctrine-item::before {
@@ -250,78 +278,90 @@
       position: absolute;
       left: 0; top: 0; bottom: 0;
       width: 2px;
-      background: var(--steel);
-      opacity: 0;
-      transition: opacity 0.2s;
+      background: var(--steel-hi);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.25s ease;
     }
 
-    .doctrine-item:hover { background: var(--bg3); }
-    .doctrine-item:hover::before { opacity: 1; }
+    .doctrine-item:hover {
+      background: var(--surface);
+    }
 
+    .doctrine-item:hover::before { transform: scaleY(1); }
+
+    /* Index numbers — brighter, archival markers */
     .doc-num-col {
+      padding: 24px 0 24px 24px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--steel-hi);
+      border-right: 1px solid var(--border);
+      align-self: stretch;
       display: flex;
       align-items: center;
-      justify-content: center;
-      border-right: 1px solid var(--border);
-    }
-
-    .doc-number {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.56rem;
-      letter-spacing: 0.1em;
-      color: var(--text-lo);
     }
 
     .doc-code-col {
-      display: flex;
-      align-items: center;
-      padding: 0 18px;
-      border-right: 1px solid var(--border);
-    }
-
-    .doc-code {
+      padding: 24px 16px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.56rem;
+      font-size: 0.6rem;
       letter-spacing: 0.1em;
       color: var(--steel-hi);
+      border-right: 1px solid var(--border);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
       text-transform: uppercase;
-      line-height: 1.5;
     }
 
-    .doc-info {
-      padding: 24px 28px;
-    }
+    .doc-info { padding: 24px 28px; }
 
     .doc-title {
       font-family: 'IBM Plex Sans', sans-serif;
       font-weight: 600;
-      font-size: 0.88rem;
-      color: var(--white);
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
       margin-bottom: 5px;
-      letter-spacing: 0;
+      color: var(--white);
     }
 
     .doc-desc {
-      font-size: 0.75rem;
-      color: var(--text-dim);
+      font-size: 0.8rem;
+      color: var(--text-lo);
       line-height: 1.6;
     }
 
     .doc-badge-col {
+      padding: 24px 24px 24px 0;
+      align-self: stretch;
       display: flex;
       align-items: center;
-      padding: 0 24px 0 0;
     }
 
     .doc-badge {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.52rem;
-      letter-spacing: 0.14em;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      padding: 4px 9px;
-      border: 1px solid var(--border2);
+      padding: 5px 11px;
+      border: 1px solid var(--steel-dim);
       color: var(--text-lo);
       white-space: nowrap;
+    }
+
+    /* Forthcoming — less dim, still clearly inactive */
+    .doctrine-item.forthcoming {
+      opacity: 0.55;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .doctrine-item.forthcoming .doc-num-col,
+    .doctrine-item.forthcoming .doc-code-col {
+      color: var(--muted);
     }
 
     /* ── ABOUT STRIP ── */
@@ -336,29 +376,32 @@
     .about-inner {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 72px 52px;
+      padding: 72px 48px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 72px;
+      gap: 80px;
       align-items: start;
     }
 
     .about-inner h2 {
       font-family: 'IBM Plex Sans Condensed', sans-serif;
       font-weight: 700;
-      font-size: clamp(1.1rem, 2vw, 1.55rem);
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
       color: var(--white);
-      margin-bottom: 18px;
       line-height: 1.2;
     }
 
     .about-inner p {
-      color: var(--text-dim);
-      font-size: 0.84rem;
-      line-height: 1.9;
-      margin-bottom: 14px;
+      color: var(--text-lo);
+      font-size: 0.88rem;
+      line-height: 1.85;
+      margin-bottom: 16px;
     }
 
+    /* Stats — stronger numbers, institutional markers */
     .stat-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -367,69 +410,73 @@
     }
 
     .stat-item {
-      padding: 24px 20px;
-      background: var(--bg3);
+      padding: 24px;
+      background: var(--bg2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
 
+    /* Numbers — much brighter, bolder, structural */
     .stat-num {
-      font-family: 'IBM Plex Sans Condensed', sans-serif;
-      font-weight: 700;
-      font-size: 1.8rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 2.2rem;
       color: var(--steel-hi);
       line-height: 1;
-      margin-bottom: 7px;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
     }
 
+    /* Stat labels — increased size */
     .stat-label {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.54rem;
-      letter-spacing: 0.18em;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-lo);
+      line-height: 1.4;
     }
 
-    /* ── PULL QUOTE ── */
-    .pullquote-strip {
+    /* ── DOCTRINE STATEMENT ── */
+    .statement-strip {
       position: relative;
       z-index: 1;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
 
-    .pullquote-inner {
+    .statement-inner {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 52px;
+      padding: 56px 48px;
       display: grid;
       grid-template-columns: 3px 1fr;
-      gap: 36px;
+      gap: 32px;
       align-items: start;
     }
 
-    .pullquote-bar {
-      background: var(--steel-dim);
-      width: 3px;
+    .statement-rule {
+      background: var(--steel);
       align-self: stretch;
-      min-height: 100%;
+      min-height: 40px;
     }
 
-    .pullquote-text {
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-weight: 300;
-      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
-      line-height: 1.7;
-      color: var(--text-dim);
-      font-style: italic;
+    .statement-text {
+      font-family: 'IBM Plex Sans Condensed', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--white);
+      line-height: 1.4;
     }
 
-    .pullquote-source {
+    .statement-source {
       margin-top: 14px;
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.56rem;
-      letter-spacing: 0.18em;
-      color: var(--text-lo);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
       text-transform: uppercase;
-      font-style: normal;
     }
 
     /* ── IP NOTICE ── */
@@ -443,58 +490,72 @@
     .ip-inner {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 56px 52px;
+      padding: 56px 48px;
     }
 
     .ip-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 48px;
-      margin-top: 28px;
+      margin-top: 32px;
     }
 
+    /* IP block headers — primary level */
     .ip-block h4 {
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-weight: 600;
-      font-size: 0.76rem;
-      margin-bottom: 14px;
-      color: var(--text-dim);
-      letter-spacing: 0.01em;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      color: var(--text-lo);
     }
 
-    .ip-block ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .ip-block ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
 
+    /* Secondary level — bullet content */
     .ip-block ul li {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.64rem;
+      font-size: 0.68rem;
       color: var(--text-lo);
       padding-left: 16px;
       position: relative;
-      line-height: 1.6;
+      line-height: 1.65;
+      letter-spacing: 0.02em;
     }
 
     .ip-block ul li::before {
       content: '—';
       position: absolute;
       left: 0;
-      color: var(--steel-dim);
+      color: var(--steel);
+      font-size: 0.5rem;
+      top: 0.25em;
     }
 
+    /* Disclaimer — tertiary, smaller paragraphs with breathing room */
     .ip-disclaimer {
-      margin-top: 36px;
-      padding: 22px 24px;
-      border-left: 2px solid var(--steel-dim);
-      background: rgba(61,90,128,0.04);
+      margin-top: 40px;
+      padding: 24px 28px;
+      border-left: 2px solid var(--steel-lo);
+      background: rgba(74,96,128,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .ip-disclaimer p {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.63rem;
-      color: var(--text-lo);
+      font-size: 0.66rem;
+      color: var(--muted);
       line-height: 1.85;
+      letter-spacing: 0.01em;
     }
-
-    .ip-disclaimer p + p { margin-top: 10px; }
 
     /* ── FOOTER ── */
     footer {
@@ -502,7 +563,7 @@
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 36px 52px;
+      padding: 36px 48px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -511,39 +572,38 @@
 
     .footer-logo {
       font-family: 'IBM Plex Mono', monospace;
-      font-weight: 400;
-      font-size: 0.64rem;
-      letter-spacing: 0.18em;
-      color: var(--steel-hi);
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      color: var(--text-lo);
       text-transform: uppercase;
     }
 
     .footer-note {
       font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.56rem;
-      letter-spacing: 0.08em;
-      color: var(--text-lo);
+      font-size: 0.62rem;
+      letter-spacing: 0.07em;
+      color: var(--muted);
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
-      .hero { padding: 90px 24px 56px; }
+      .hero { padding: 96px 24px 64px; }
       .section { padding: 56px 24px; }
-      .rule { padding: 0 24px; }
-      .doctrine-item { grid-template-columns: 40px 1fr; }
+      .doctrine-item { grid-template-columns: 44px 1fr; }
       .doc-code-col { display: none; }
       .doc-badge-col { display: none; }
-      .about-inner { grid-template-columns: 1fr; gap: 40px; padding: 52px 24px; }
-      .pullquote-inner { padding: 44px 24px; }
-      .ip-grid { grid-template-columns: 1fr; gap: 28px; }
+      .about-inner { grid-template-columns: 1fr; gap: 40px; padding: 56px 24px; }
+      .statement-inner { padding: 40px 24px; }
+      .ip-grid { grid-template-columns: 1fr; gap: 32px; }
       .ip-inner { padding: 48px 24px; }
-      footer { flex-direction: column; gap: 14px; padding: 36px 24px; text-align: center; }
+      footer { flex-direction: column; gap: 12px; padding: 36px 24px; text-align: center; }
     }
   </style>
 </head>
@@ -555,28 +615,33 @@
       <li><a href="#doctrine">Doctrine</a></li>
       <li><a href="publications.html">Publications</a></li>
       <li><a href="doctrine-map.html">Framework Map</a></li>
-      <li><a href="https://github.com/emmrex01/authority-at-execution" target="_blank">GitHub</a></li>
+      <li><a href="https://github.com/emmrex01/authority-at-execution" target="_blank">GitHub ↗</a></li>
     </ul>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <p class="hero-tag">Governance · Authority · Execution · AI · Robotics · Autonomous Systems</p>
-    <h1>MOST AI GOVERNANCE<br />FAILS DURING<br />OPERATION</h1>
+    <h1>
+      <span class="hero-line-dim">Most AI</span><br />
+      <span class="hero-line-bright">Governance Fails</span><br />
+      <span class="hero-line-mid">During Operation</span>
+    </h1>
+    <div class="hero-rule"></div>
     <p class="hero-sub">
       Operational governance, authority validation, and execution-time accountability frameworks for AI, robotics, and autonomous systems.
     </p>
     <div class="hero-actions">
       <a href="publications.html" class="btn-primary">View Publications</a>
-      <a href="doctrine-map.html" class="btn-outline">Doctrine Map</a>
+      <a href="doctrine-map.html" class="btn-outline">Framework Map</a>
     </div>
   </section>
 
-  <div class="rule"><div></div></div>
+  <hr class="full-divider" />
 
   <!-- DOCTRINE STACK -->
   <section class="section" id="doctrine">
-    <p class="section-label">Foundation Stack · Phase I Release</p>
+    <p class="section-label">Foundation Stack · Phase I · 2025</p>
     <h2 class="section-title">Core Publication Stack</h2>
     <p class="section-body">
       Foundational doctrine papers sequenced from public understanding through governance architecture to execution-layer infrastructure. Each paper builds on the last.
@@ -585,61 +650,61 @@
     <div class="doctrine-grid">
 
       <a href="docs/ZTX-LTH-001-Letter-to-Humanity.pdf" class="doctrine-item" target="_blank">
-        <div class="doc-num-col"><span class="doc-number">01</span></div>
-        <div class="doc-code-col"><div class="doc-code">ZTX-LTH-001</div></div>
+        <span class="doc-num-col">01</span>
+        <span class="doc-code-col">ZTX-LTH-001</span>
         <div class="doc-info">
           <div class="doc-title">Letter to Humanity</div>
-          <div class="doc-desc">A Citizen's Foundation for Automated Society. Human accountability, democratic safeguards, automation awareness. The public entry point into the governance ecosystem.</div>
+          <div class="doc-desc">A Citizen's Foundation for Automated Society. Human accountability, democratic safeguards, and automation awareness. Establishes the why.</div>
         </div>
         <div class="doc-badge-col"><span class="doc-badge">Foundation</span></div>
       </a>
 
       <a href="docs/PAGF-002-Public-Automation-Governance-Framework.pdf" class="doctrine-item" target="_blank">
-        <div class="doc-num-col"><span class="doc-number">02</span></div>
-        <div class="doc-code-col"><div class="doc-code">PAGF-002</div></div>
+        <span class="doc-num-col">02</span>
+        <span class="doc-code-col">PAGF-002</span>
         <div class="doc-info">
           <div class="doc-title">Public Automation Governance Framework</div>
-          <div class="doc-desc">Governance requirements, government and business obligations, oversight structures, and accountability models for automated systems.</div>
+          <div class="doc-desc">Government and business obligations, oversight structures, and accountability models for automated systems in democratic societies.</div>
         </div>
         <div class="doc-badge-col"><span class="doc-badge">Governance</span></div>
       </a>
 
       <a href="docs/AVE-003-Authority-at-Execution.pdf" class="doctrine-item" target="_blank">
-        <div class="doc-num-col"><span class="doc-number">03</span></div>
-        <div class="doc-code-col"><div class="doc-code">AVE-003</div></div>
+        <span class="doc-num-col">03</span>
+        <span class="doc-code-col">AVE-003</span>
         <div class="doc-info">
           <div class="doc-title">Authority at Execution</div>
-          <div class="doc-desc">Why systems fail during operation and why authentication alone is insufficient. Permission vs authority. Execution-layer validation explained.</div>
+          <div class="doc-desc">Why systems fail during operation. Permission vs authority. Why authentication alone is insufficient governance at execution layer.</div>
         </div>
         <div class="doc-badge-col"><span class="doc-badge">Architecture</span></div>
       </a>
 
       <a href="docs/HAFCF-004-Human-Authority-Failure-Continuity-Framework.pdf" class="doctrine-item" target="_blank">
-        <div class="doc-num-col"><span class="doc-number">04</span></div>
-        <div class="doc-code-col"><div class="doc-code">HAFCF-004</div></div>
+        <span class="doc-num-col">04</span>
+        <span class="doc-code-col">HAFCF-004</span>
         <div class="doc-info">
           <div class="doc-title">Human Authority Failure &amp; Continuity Framework</div>
-          <div class="doc-desc">Mechanics of authority failure and continuity infrastructure. How human accountability degrades in autonomous and AI-assisted systems.</div>
+          <div class="doc-desc">Mechanics of authority failure and continuity infrastructure. How human accountability progressively collapses in autonomous systems.</div>
         </div>
         <div class="doc-badge-col"><span class="doc-badge">Framework</span></div>
       </a>
 
       <a href="docs/FJF-005-Failure-Justification-Framework.pdf" class="doctrine-item" target="_blank">
-        <div class="doc-num-col"><span class="doc-number">05</span></div>
-        <div class="doc-code-col"><div class="doc-code">FJF-005</div></div>
+        <span class="doc-num-col">05</span>
+        <span class="doc-code-col">FJF-005</span>
         <div class="doc-info">
           <div class="doc-title">Failure Justification Framework</div>
-          <div class="doc-desc">Structured analysis of operational failure patterns and justification doctrine for autonomous systems.</div>
+          <div class="doc-desc">Structured analysis of operational failure patterns. Conditions under which autonomous systems become ungovernable during operation.</div>
         </div>
         <div class="doc-badge-col"><span class="doc-badge">Analysis</span></div>
       </a>
 
-      <div class="doctrine-item" style="opacity:0.3;pointer-events:none;">
-        <div class="doc-num-col"><span class="doc-number">06–11</span></div>
-        <div class="doc-code-col"><div class="doc-code">HBAI · HAS<br/>FLAIG · ATM<br/>AIF · RSGD</div></div>
+      <div class="doctrine-item forthcoming">
+        <span class="doc-num-col">06–11</span>
+        <span class="doc-code-col">Extended</span>
         <div class="doc-info">
           <div class="doc-title">Extended Doctrine Stack</div>
-          <div class="doc-desc">Additional governance frameworks, human-bound AI doctrine, authority models, and implementation architecture. Publishing progressively.</div>
+          <div class="doc-desc">HBAI · HAS · FLAIG · ATM · AIF · RSGD — Publishing progressively.</div>
         </div>
         <div class="doc-badge-col"><span class="doc-badge">Forthcoming</span></div>
       </div>
@@ -647,9 +712,9 @@
     </div>
   </section>
 
-  <div class="rule"><div></div></div>
+  <hr class="full-divider" />
 
-  <!-- ABOUT STRIP -->
+  <!-- ABOUT -->
   <div class="about-strip">
     <div class="about-inner">
       <div>
@@ -660,38 +725,38 @@
         <p>
           Authority, legitimacy, safety conditions, and operational justification must be validated while systems are actively running — not only at login, approval, or after a failure.
         </p>
-        <a href="doctrine-map.html" class="btn-outline" style="margin-top:8px;display:inline-block;">Explore the Framework</a>
+        <a href="doctrine-map.html" class="btn-outline" style="margin-top:8px;">Framework Map</a>
       </div>
       <div class="stat-grid">
         <div class="stat-item">
           <div class="stat-num">11</div>
-          <div class="stat-label">Foundation Papers</div>
+          <div class="stat-label">Foundational<br/>Doctrines</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">v1</div>
-          <div class="stat-label">Phase One Release</div>
+          <div class="stat-num">V1</div>
+          <div class="stat-label">Public<br/>Release</div>
         </div>
         <div class="stat-item">
           <div class="stat-num">10</div>
-          <div class="stat-label">Published Now</div>
+          <div class="stat-label">Published<br/>Now</div>
         </div>
         <div class="stat-item">
           <div class="stat-num">∞</div>
-          <div class="stat-label">Expandable Architecture</div>
+          <div class="stat-label">Expandable<br/>Architecture</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- PULL QUOTE -->
-  <div class="pullquote-strip">
-    <div class="pullquote-inner">
-      <div class="pullquote-bar"></div>
+  <!-- DOCTRINE STATEMENT — replaces quote -->
+  <div class="statement-strip">
+    <div class="statement-inner">
+      <div class="statement-rule"></div>
       <div>
-        <div class="pullquote-text">
-          This is now crossing from GitHub repo into emerging governance institution aesthetic. It feels coherent. Not just documents. Not just branding. A system.
+        <div class="statement-text">
+          Governance cannot exist only before execution begins.
         </div>
-        <div class="pullquote-source">— Independent Governance Reviewer, May 2025</div>
+        <div class="statement-source">— Foundational position · Zyzyx Authority System™</div>
       </div>
     </div>
   </div>
@@ -700,9 +765,10 @@
   <div class="ip-notice">
     <div class="ip-inner">
       <p class="section-label">Public Doctrine · Intellectual Property Notice</p>
+
       <div class="ip-grid">
         <div class="ip-block">
-          <h4>These publications are intended for:</h4>
+          <h4>These publications are intended for</h4>
           <ul>
             <li>Governance discussion and institutional consideration</li>
             <li>Safety and standards dialogue</li>
@@ -713,7 +779,7 @@
           </ul>
         </div>
         <div class="ip-block">
-          <h4>These publications are NOT released as:</h4>
+          <h4>These publications are not released as</h4>
           <ul>
             <li>Implementation specifications or production infrastructure</li>
             <li>Deployable autonomous control systems</li>
@@ -724,10 +790,17 @@
           </ul>
         </div>
       </div>
+
       <div class="ip-disclaimer">
-        <p>These publications form part of the broader Zyzyx Authority System™ governance ecosystem. Certain concepts, governance structures, operational models, validation architectures, authority frameworks, continuity systems, and execution-layer control concepts described within these publications may be subject to existing intellectual property protections, pending patent filings, future patent filings, protected trade-secret infrastructure, and unpublished implementation architecture.</p>
-        <p>No licence is granted to reproduce proprietary infrastructure, derive implementation architecture, replicate operational systems, commercialise derivative governance systems, or deploy protected execution-layer infrastructure without explicit written permission from Zyzyx Authority System™.</p>
-        <p>These publications should be interpreted as governance doctrine, conceptual architecture, standards-oriented discussion, and institutional framework material — not as open implementation specifications or unrestricted deployment rights.</p>
+        <p>
+          These publications form part of the broader Zyzyx Authority System™ governance ecosystem. Certain concepts, governance structures, operational models, validation architectures, authority frameworks, continuity systems, and execution-layer control concepts described within these publications may be subject to existing intellectual property protections, pending patent filings, future patent filings, protected trade-secret infrastructure, and unpublished implementation architecture.
+        </p>
+        <p>
+          No licence is granted to reproduce proprietary infrastructure, derive implementation architecture, replicate operational systems, commercialise derivative governance systems, or deploy protected execution-layer infrastructure without explicit written permission from Zyzyx Authority System™.
+        </p>
+        <p>
+          These publications should be interpreted as governance doctrine, conceptual architecture, standards-oriented discussion, and institutional framework material — not as open implementation specifications or unrestricted deployment rights.
+        </p>
       </div>
     </div>
   </div>
